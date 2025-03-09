@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Ratio Analysis Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container result-container">
+        <header>
+            <h1>Your Golden Ratio Analysis</h1>
+            <div class="score-display">
+                <div class="score-circle" style="--percentage: {{ score }}%">
+                    <span class="score-number">{{ score }}</span>
+                    <span class="score-label">/100</span>
+                </div>
+                <div class="score-text">
+                    <h3>Golden Ratio Score</h3>
+                    <p>
+                    {% if score > 90 %}
+                        Exceptional facial harmony! Your proportions very closely match the golden ratio.
+                    {% elif score > 80 %}
+                        Excellent facial symmetry with strong golden ratio alignment.
+                    {% elif score > 70 %}
+                        Very good facial proportions with good golden ratio harmony.
+                    {% elif score > 60 %}
+                        Good facial proportions with some alignment to the golden ratio.
+                    {% else %}
+                        Your facial proportions have some deviation from the golden ratio, which is completely normal.
+                    {% endif %}
+                    </p>
+                </div>
+            </div>
+        </header>
+        
+        <div class="results-section">
+            <div class="result-image">
+                <img src="data:image/png;base64,{{ image_data }}" alt="Analysis Results">
+            </div>
+            
+            <div class="measurements-table">
+                <h2>Detailed Measurements</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Facial Feature</th>
+                            <th>Your Ratio</th>
+                            <th>Golden Ratio</th>
+                            <th>Deviation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for feature, data in measurements.items() %}
+                        <tr>
+                            <td>{{ feature.replace('_', ' ').title() }}</td>
+                            <td>{{ "%.3f"|format(data.ratio) }}</td>
+                            <td>{{ "%.3f"|format(golden_ratio) }}</td>
+                            <td>{{ "%.2f"|format(data.deviation) }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            <h3>Understanding Your Results</h3>
+            <p>The golden ratio (approximately 1.618) has been associated with aesthetic beauty throughout history. Your analysis compares key facial proportions to this ideal ratio. Lower deviation percentages indicate closer alignment with the golden ratio.</p>
+            <p>Remember, beauty is subjective and diverse! This analysis is purely mathematical and doesn't define real beauty, which comes in countless forms.</p>
+        </div>
+        
+        <div class="actions">
+            <a href="{{ url_for('static', filename='uploads/' + filename) }}" download class="button">Download Analysis</a>
+            <a href="{{ url_for('upload_file') }}" class="button secondary">Analyze Another Photo</a>
+        </div>
+    </div>
+</body>
+</html>

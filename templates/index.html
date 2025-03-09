@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golden Ratio Face Analyzer</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='./static/css/style.css') }}"> -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Golden Ratio Face Analyzer</h1>
+            <p class="subtitle">Analyze facial proportions based on the divine golden ratio (1.618)</p>
+        </header>
+        
+        <section class="upload-section">
+            <div class="info-panel">
+                <h2>What is the Golden Ratio?</h2>
+                <p>The Golden Ratio (approximately 1.618) is a mathematical ratio that appears in nature and is often associated with beauty and harmony. In facial aesthetics, certain proportions that follow the golden ratio are considered more aesthetically pleasing.</p>
+                <h3>How it works:</h3>
+                <ol>
+                    <li>Upload a clear, front-facing portrait photo</li>
+                    <li>Our algorithm will detect facial landmarks</li>
+                    <li>We'll analyze key facial proportions against the golden ratio</li>
+                    <li>Get your personalized golden ratio score and detailed measurements</li>
+                </ol>
+            </div>
+            
+            <div class="upload-panel">
+                <h2>Upload Your Photo</h2>
+                
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class="alert">
+                    {% for message in messages %}
+                      <p>{{ message }}</p>
+                    {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endwith %}
+                
+                <form method="post" enctype="multipart/form-data" id="upload-form">
+                    <div class="file-input-container">
+                        <input type="file" name="file" id="file-input" accept="image/*" required>
+                        <label for="file-input" class="file-label">
+                            <span class="file-icon">📷</span>
+                            <span class="file-text">Choose a photo</span>
+                        </label>
+                        <div id="file-name" class="file-name"></div>
+                    </div>
+                    
+                    <div class="preview-container">
+                        <img id="image-preview" class="hidden" src="#" alt="Preview">
+                    </div>
+                    
+                    <button type="submit" class="button">Analyze Face</button>
+                </form>
+            </div>
+        </section>
+        
+        <section class="requirements">
+            <h3>For best results:</h3>
+            <ul>
+                <li>Use a clear, well-lit front-facing photo</li>
+                <li>Maintain a neutral expression</li>
+                <li>Ensure your entire face is visible</li>
+                <li>Remove glasses if possible</li>
+            </ul>
+        </section>
+    </div>
+    
+    <script>
+        // Display file name and preview image when selected
+        const fileInput = document.getElementById('file-input');
+        const fileName = document.getElementById('file-name');
+        const imagePreview = document.getElementById('image-preview');
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                // Show file name
+                fileName.textContent = this.files[0].name;
+                
+                // Show image preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    imagePreview.classList.remove('hidden');
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+    </script>
+</body>
+</html>
